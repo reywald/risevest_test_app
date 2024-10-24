@@ -1,4 +1,3 @@
-from selenium import webdriver
 from selenium.webdriver import Chrome, Firefox, Edge
 
 # Web Driver services for different browsers
