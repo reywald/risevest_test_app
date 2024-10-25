@@ -73,6 +73,8 @@ class LoginPage(BasePage):
         WebDriverWait(self.browser, 20).until(EC.visibility_of(error_message))
         self.tester.assertEqual(error_message.text, message)
 
+        self.logger.info(f"{__class__}: Checked email address error message")
+
     def check_password_error(self, message: str):
         """
         Verify that there is an error while attempting to enter value in 
@@ -86,6 +88,8 @@ class LoginPage(BasePage):
         error_message = self.get_element(self.PASSWORD_HELPER_TEXT)
         WebDriverWait(self.browser, 20).until(EC.visibility_of(error_message))
         self.tester.assertEqual(error_message.text, message)
+
+        self.logger.info(f"{__class__}: Checked password error message")
 
     def check_form_error(self, message: str):
         """
@@ -101,6 +105,8 @@ class LoginPage(BasePage):
         WebDriverWait(self.browser, 20).until(EC.visibility_of(error_message))
         self.tester.assertEqual(error_message.text, message)
 
+        self.logger.info(f"{__class__}: Checked login form error message")
+
     def clear_input(self, input_field: WebElement):
         """
         Clears the input field's contents
@@ -112,6 +118,8 @@ class LoginPage(BasePage):
         self.tester.assertEqual(input_field.tag_name, "input")
         input_field.send_keys(Keys.CONTROL, "a")
         input_field.send_keys(Keys.BACKSPACE)
+
+        self.logger.info(f"{__class__}: Cleared input field contents")
 
     def validate_page(self):
         self.await_page_load(f"{os.getenv('BASE_URL')}/login")
