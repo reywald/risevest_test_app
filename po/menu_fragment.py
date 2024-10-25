@@ -21,6 +21,19 @@ class SideMenu(BasePage):
 
         self.logger.info(f"{__class__}: In {__class__.__qualname__}")
 
+    def navigate_to_plans(self):
+        """
+        Click the Plans link to open the plans page
+        """
+        plans_link = self.get_element(self.PLANS_MENU)
+        plans_link.click()
+
+        self.tester.assertIsNotNone(plans_link.get_attribute("aria-current"))
+        self.tester.assertEqual(
+            plans_link.get_attribute("aria-current"), "page")
+
+        self.logger.info(f"{__class__}: Navigated to plans page")
+
     def navigate_to_wallet(self):
         """
         Click the Wallet link to open the wallet page

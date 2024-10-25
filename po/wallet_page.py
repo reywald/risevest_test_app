@@ -31,12 +31,18 @@ class WalletPage(BasePage):
         self.tester.assertEqual(wallet_balance.text, wallet_amount,
                                 "Wallet balance is not matched.")
 
+        self.logger.info(
+            f"{__class__}: Checked the Wallet balance")
+
     def toggle_wallet_balance_visibility(self):
         """
         Click the wallet toggle button to show/hide the wallet balance
         """
         wallet_toggle = self.get_element(self.WALLET_TOGGLE)
         wallet_toggle.click()
+
+        self.logger.info(
+            f"{__class__}: Toggled the Wallet balance visibility")
 
     def is_wallet_balance_hidden(self) -> bool:
         """
