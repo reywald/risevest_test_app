@@ -49,7 +49,9 @@ class NotificationsModal(BasePage):
             f"{__class__}: Check that the modal elements have changed")
 
     def validate_page(self):
-        self.get_element(self.NOTIFICATION_MODAL)
+        WebDriverWait(self.browser, 40).until(
+            EC.visibility_of_element_located(self.NOTIFICATION_MODAL)
+        )
         heading = self.get_element(self.HEADING)
         self.tester.assertEqual(
             heading.text, "Allow notifications", "Heading not detected.")

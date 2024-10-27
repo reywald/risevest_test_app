@@ -1,0 +1,29 @@
+[
+  {
+    "type": "BUSINESS",
+    "title": "Start a Business",
+    "subtitle": "A short to mid-term investment plan to start your dream business.",
+    "amount": 250000,
+    "name": "Etiquette",
+    "currency": "NAIRA",
+    "period": 3
+  },
+  {
+    "type": "SCHOOL",
+    "title": "Save for School",
+    "subtitle": "Financially preparing for school can be challenging but having an investment plan helps. This goal helps you fund your tuition and cover school expenses.",
+    "amount": 10000,
+    "name": "Samplexity",
+    "currency": "NAIRA",
+    "period": 4
+  },
+  {
+    "type": "WEDDING",
+    "title": "Plan a Wedding",
+    "subtitle": "Save for the wedding of your dreams with this plan.",
+    "amount": 450000,
+    "name": "My Wedding",
+    "currency": "NAIRA",
+    "period": 6
+  }
+]

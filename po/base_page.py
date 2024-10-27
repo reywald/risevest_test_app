@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from selenium.webdriver import Chrome, Edge, Firefox
+from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException, NoSuchElementException
@@ -9,7 +9,7 @@ from unittest import TestCase
 class BasePage(ABC):
     """ The base page from which other page objects inherit """
 
-    def __init__(self, browser: Chrome | Edge | Firefox, tester: TestCase):
+    def __init__(self, browser: WebDriver, tester: TestCase):
         """
         Params
         ------

@@ -14,7 +14,7 @@ from data.data_generator import DataTypes, get_credential_data
 from po.base_page import BasePage
 from po.login_page import LoginPage
 from po.home_page import HomePage
-from po.menu_fragment import SideMenu
+from po.side_menu import SideMenu
 
 
 class TestLogin(unittest.TestCase):

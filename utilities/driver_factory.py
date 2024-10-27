@@ -1,73 +1,61 @@
-from selenium.webdriver import Chrome, Firefox, Edge
-
-# Web Driver services for different browsers
-from selenium.webdriver.chrome.service import Service as ChromeService
-from selenium.webdriver.firefox.service import Service as FirefoxService
-from selenium.webdriver.edge.service import Service as EdgeService
-
-# Driver managers for different browsers
-from webdriver_manager.chrome import ChromeDriverManager
-from webdriver_manager.firefox import GeckoDriverManager
-from webdriver_manager.microsoft import EdgeChromiumDriverManager
-
-from typing import Tuple
+from random import choice
+from selenium.webdriver import (
+    Chrome, Firefox, Edge,
+    ChromeOptions, FirefoxOptions, EdgeOptions
+)
+from selenium.webdriver.common.options import ArgOptions
+from selenium.webdriver.remote.webdriver import WebDriver
 
 from .driver_types import DriverTypes
+from .proxies import proxy_list
 
 
 class DriverFactory():
 
     @classmethod
-    def get_driver(cls, browser_type: DriverTypes):
+    def get_driver(cls, browser_type: DriverTypes) -> WebDriver:
         """
         Get the Browser driver given a browser name
 
         Params
         ------
-        browser_name: DriverTypes
+        browser_type: DriverTypes
+            An option from Chrome | Edge | Firefox
 
         Returns
         -------
-        [Chrome | Firefox | Edge]
+        WebDriver
         """
+
+        proxy_options = cls.__set_proxy_options(browser_type)
+
         return {
-            DriverTypes.CHROME: cls._get_chrome_manager,
-            DriverTypes.FIREFOX: cls._get_firefox_manager,
-            DriverTypes.EDGE: cls._get_edge_manager,
+            DriverTypes.CHROME: Chrome,
+            DriverTypes.FIREFOX: Firefox,
+            DriverTypes.EDGE: Edge,
+        }[browser_type](options=proxy_options)
+
+    def __set_proxy_options(self, browser_type: DriverTypes) -> ArgOptions:
+        """
+        Fetch a random proxy and add to a browser Options object
+
+        Params
+        ------
+        browser_type: DriverTypes
+            An option from Chrome | Edge | Firefox
+
+        Returns
+        -------
+        ArgOptions
+            A browser Options instance
+        """
+        proxy = choice(proxy_list)
+
+        options: ArgOptions = {
+            DriverTypes.CHROME: ChromeOptions,
+            DriverTypes.FIREFOX: FirefoxOptions,
+            DriverTypes.EDGE: EdgeOptions,
         }[browser_type]()
 
-    @staticmethod
-    def _get_chrome_manager() -> Chrome:
-        """
-        Get the Chrome driver
-
-        Returns
-        -------
-        Chrome
-        """
-
-        return Chrome(service=ChromeService(executable_path=ChromeDriverManager().install()))
-
-    @staticmethod
-    def _get_firefox_manager() -> Firefox:
-        """
-        Get the Firefox driver
-
-        Returns
-        -------
-        Firefox
-        """
-
-        return Firefox(service=FirefoxService(executable_path=GeckoDriverManager().install()))
-
-    @staticmethod
-    def _get_edge_manager() -> Edge:
-        """
-        Get the Edge driver
-
-        Returns
-        -------
-        Edge
-        """
-
-        return Edge(service=EdgeService(executable_path=EdgeChromiumDriverManager().install()))
+        options.add_argument(f"--proxy-server={proxy}")
+        return options

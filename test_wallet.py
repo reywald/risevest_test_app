@@ -3,16 +3,13 @@ import os
 import unittest
 
 from po.base_page import BasePage
-from po.login_page import LoginPage
-from po.home_page import HomePage
-from po.notifications_fragment import NotificationsModal
-from po.confirm_notifications_fragment import ConfirmNotificationsModal
-from po.menu_fragment import SideMenu
+from po.side_menu import SideMenu
 from po.wallet_page import WalletPage
 
 from utilities.driver_factory import DriverFactory
 from utilities.driver_types import DriverTypes
 from utilities.logs_handler import LogHandler
+from utilities.commands import app_login
 
 
 class TestWallet(unittest.TestCase):
@@ -42,6 +39,8 @@ class TestWallet(unittest.TestCase):
     def tearDown(self):
         self.browser.close()
         self.logger.info(f"{__class__}: Closed browser window")
+        app_login({"username": self.username,
+                  "password": self.password}, self.browser, self)
 
     @classmethod
     def tearDownClass(cls):
@@ -49,37 +48,19 @@ class TestWallet(unittest.TestCase):
         cls.browser = None
         cls.logger.info(f"{__class__}: Closed browser and session")
 
-    def access_wallet_page(self):
-        login_page = LoginPage(self.browser, self)
-        login_page.validate_page()
-        login_page.login(username=self.username, password=self.password)
-
-        home_page = HomePage(self.browser, self)
-        home_page.validate_page()
-
-        notifications_modal = NotificationsModal(self.browser, self)
-        notifications_modal.validate_page()
-        notifications_modal.cancel_modal()
-        notifications_modal.confirm_modal_changed()
-
-        confirm_modal = ConfirmNotificationsModal(self.browser, self)
-        confirm_modal.validate_page()
-        confirm_modal.close_modal()
-        confirm_modal.confirm_modal_closed()
-
+    def test_wallet_page_balance(self):
         side_menu = SideMenu(self.browser, self)
         side_menu.validate_page()
         side_menu.navigate_to_wallet()
-
-    def test_wallet_page_balance(self):
-        self.access_wallet_page()
 
         wallet_page = WalletPage(self.browser, self)
         wallet_page.validate_page()
         wallet_page.check_wallet_balance("$0.00")
 
     def test_wallet_page_toggle_balance(self):
-        self.access_wallet_page()
+        side_menu = SideMenu(self.browser, self)
+        side_menu.validate_page()
+        side_menu.navigate_to_wallet()
 
         wallet_page = WalletPage(self.browser, self)
         wallet_page.validate_page()

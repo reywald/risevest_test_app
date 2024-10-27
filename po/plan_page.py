@@ -4,7 +4,7 @@ from selenium.webdriver.remote.webelement import WebElement
 from po.base_page import BasePage
 
 
-class PlanPage(BasePage):
+class PlansPage(BasePage):
     """ The Plans page of the user """
 
     def __init__(self, browser, tester: TestCase):
@@ -20,33 +20,6 @@ class PlanPage(BasePage):
             By.CSS_SELECTOR, "[role='tabpanel']:not([class='hidden']) h2")
         self.NO_PLANS_TEXT = (
             By.XPATH, "//div[@role='tabpanel'][1]/div/div/div[2]/p")
-
-    # def check_wallet_balance(self, wallet_amount: str):
-    #     """
-    #     Checks that the wallet balance is correct
-
-    #     Params
-    #     ------
-    #     wallet_amount: str - The string to compare to
-    #     """
-    #     wallet_balance = self.get_element(self.WALLET_BALANCE)
-    #     self.tester.assertEqual(wallet_balance.text, wallet_amount,
-    #                             "Wallet balance is not matched.")
-
-    # def toggle_wallet_balance_visibility(self):
-    #     """
-    #     Click the wallet toggle button to show/hide the wallet balance
-    #     """
-    #     wallet_toggle = self.get_element(self.WALLET_TOGGLE)
-    #     wallet_toggle.click()
-
-    # def is_wallet_balance_hidden(self) -> bool:
-    #     """
-    #     Verifies if the wallet balance is shown or hidden.
-    #     If 'asterisks' characters are present, then it is hidden
-    #     """
-    #     wallet_balance = self.get_element(self.WALLET_BALANCE)
-    #     return "*" in wallet_balance.text
 
     def validate_page(self):
         plans_heading = self.get_element(self.PLANS_HEADING)
