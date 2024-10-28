@@ -59,6 +59,7 @@ class TestPlans(unittest.TestCase):
         cls.logger.info(f"{__class__}: Closed browser and session")
 
     def test_view_plans_page(self):
+        """User should be able to view plans"""
         side_menu = SideMenu(self.browser, self)
         side_menu.validate_page()
         side_menu.navigate_to_plans()
@@ -73,6 +74,7 @@ class TestPlans(unittest.TestCase):
         goals_panel.validate_page()
 
     def test_create_business_plan(self):
+        """User should be able to create a new investment plan"""
         side_menu = SideMenu(self.browser, self)
         side_menu.validate_page()
         side_menu.navigate_to_plans()

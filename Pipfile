@@ -5,9 +5,9 @@ name = "pypi"
 
 [packages]
 selenium = "*"
-webdriver-manager = "*"
 python-dotenv = "*"
 python-dateutil = "*"
+htmltestrunner-rv = "*"
 
 [dev-packages]
 

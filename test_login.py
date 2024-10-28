@@ -24,7 +24,7 @@ class TestLogin(unittest.TestCase):
         # Load environment variables for the test runner
         load_dotenv()
         cls.base_url = os.getenv("BASE_URL")
-        cls.browser = DriverFactory.get_driver(browser_type=DriverTypes.CHROME)
+        cls.browser = DriverFactory.get_random_driver()
 
         cls.logger = LogHandler.create_logger()
         BasePage.set_logger(cls.logger)
@@ -47,6 +47,7 @@ class TestLogin(unittest.TestCase):
         cls.logger.info(f"{__class__}: Closed browser and session")
 
     def test_valid_login(self):
+        """User should be able to log in to the Risevest web app using valid credentials"""
         login_page = LoginPage(self.browser, self)
         login_page.validate_page()
         username = os.getenv("ACCOUNT_USERNAME")
@@ -62,6 +63,7 @@ class TestLogin(unittest.TestCase):
         time.sleep(4)
 
     def test_incorrect_email_login(self):
+        """User should not be able to log in with invalid emails"""
         login_page = LoginPage(self.browser, self)
         login_page.validate_page()
         password = os.getenv("ACCOUNT_PASSWORD")
@@ -74,6 +76,7 @@ class TestLogin(unittest.TestCase):
                     message="Invalid email or password.")
 
     def test_incorrect_password_login(self):
+        """User should not be able to log in with incorrect passwords"""
         login_page = LoginPage(self.browser, self)
         login_page.validate_page()
         username = os.getenv("ACCOUNT_USERNAME")
@@ -86,6 +89,7 @@ class TestLogin(unittest.TestCase):
                     message="Invalid email or password.")
 
     def test_blank_email_login(self):
+        """User should not be able to log in without entering the email address"""
         login_page = LoginPage(self.browser, self)
         login_page.validate_page()
         username = ""
@@ -95,6 +99,7 @@ class TestLogin(unittest.TestCase):
         login_page.check_email_error(message="Enter your email address")
 
     def test_blank_password_login(self):
+        """User should not be able to log in without entering the password"""
         login_page = LoginPage(self.browser, self)
         login_page.validate_page()
         username = os.getenv("ACCOUNT_USERNAME")

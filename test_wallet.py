@@ -19,8 +19,7 @@ class TestWallet(unittest.TestCase):
         # Load environment variables for the test runner
         load_dotenv()
         cls.base_url = os.getenv("BASE_URL")
-        cls.browser = DriverFactory.get_driver(
-            browser_type=DriverTypes.FIREFOX)
+        cls.browser = DriverFactory.get_random_driver()
 
         cls.username = os.getenv("ACCOUNT_USERNAME")
         cls.password = os.getenv("ACCOUNT_PASSWORD")
@@ -33,14 +32,14 @@ class TestWallet(unittest.TestCase):
     def setUp(self):
         self.browser.get(self.base_url)
         self.browser.maximize_window()
+        app_login({"username": self.username,
+                  "password": self.password}, self.browser, self)
 
         self.logger.info(f"{__class__}: Opened browser")
 
     def tearDown(self):
         self.browser.close()
         self.logger.info(f"{__class__}: Closed browser window")
-        app_login({"username": self.username,
-                  "password": self.password}, self.browser, self)
 
     @classmethod
     def tearDownClass(cls):
@@ -49,6 +48,7 @@ class TestWallet(unittest.TestCase):
         cls.logger.info(f"{__class__}: Closed browser and session")
 
     def test_wallet_page_balance(self):
+        """User should be able to view the wallet section"""
         side_menu = SideMenu(self.browser, self)
         side_menu.validate_page()
         side_menu.navigate_to_wallet()
@@ -58,6 +58,7 @@ class TestWallet(unittest.TestCase):
         wallet_page.check_wallet_balance("$0.00")
 
     def test_wallet_page_toggle_balance(self):
+        """User should be able to hide/show their wallet balance"""
         side_menu = SideMenu(self.browser, self)
         side_menu.validate_page()
         side_menu.navigate_to_wallet()

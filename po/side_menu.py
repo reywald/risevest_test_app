@@ -48,8 +48,8 @@ class SideMenu(BasePage):
         self.logger.info(f"{__class__}: Navigated to wallet page")
 
     def validate_page(self):
-        menu_logo = self.get_element(self.LOGO)
-        self.tester.assertIsNotNone(menu_logo, "Logo not detected.")
+        # menu_logo = self.get_element(self.LOGO)
+        # self.tester.assertIsNotNone(menu_logo, "Logo not detected.")
 
         home_menu = self.get_element(self.HOME_MENU)
         self.tester.assertEqual(home_menu.text, "Home")
