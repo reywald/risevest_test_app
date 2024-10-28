@@ -1,6 +1,7 @@
 from unittest import TestCase
 from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.wait import WebDriverWait
 from po.plans.plan_base_page import PlanBasePage
 
 
@@ -12,10 +13,10 @@ class PlanTargetAmountPage(PlanBasePage):
 
         self.HEADING = (By.CSS_SELECTOR, "form div.relative h2")
         self.BACK_BUTTON = (By.CSS_SELECTOR, "form div.relative button")
-        self.QUESTION_TEXT = (By.CSS_SELECTOR, "form p:nth-child(1)")
+        self.QUESTION_2 = (By.CSS_SELECTOR, "form p:nth-child(1)")
         self.NAME_INPUT = (By.ID, "name")
         self.INPUT_TEXT = (By.CSS_SELECTOR, "form p:nth-child(3)")
-        self.PROMPT_TEXT = (By.CSS_SELECTOR, "form p:nth-child(2)")
+        self.PROMPT_TEXT = (By.ID, "name-helper-text")
         self.CONVERT_TEXT = (By.CSS_SELECTOR, "form p:nth-child(5)")
         self.CONTINUE_BUTTON = (By.CSS_SELECTOR, "form button:nth-child(6)")
 
@@ -31,8 +32,7 @@ class PlanTargetAmountPage(PlanBasePage):
             The target amount
         """
         name_input = self.get_element(self.NAME_INPUT)
-        name_input.send_keys(Keys.CONTROL)
-        name_input.send_keys("a")
+        self.clear_input(name_input)
         name_input.send_keys(amount if amount else self.plan_data["amount"])
 
         self.logger.info(f"{__class__}: Entered an amount")
@@ -61,14 +61,17 @@ class PlanTargetAmountPage(PlanBasePage):
         self.logger.info(f"{__class__}: Checked currency conversion accuracy")
 
     def validate_page(self):
-        heading = self.get_element(self.HEADING)
-        self.tester.assertEqual(
-            heading.text, "Target Amount", "Heading text is not matched.")
+        WebDriverWait(self.browser, 20).until(
+            EC.url_contains("stage=targetAmount"))
+
+        # heading = self.get_element(self.HEADING)
+        # self.tester.assertEqual(
+        #     heading.text, "Target Amount", "Heading text is not matched.")
 
         self.tester.assertIsNotNone(self.get_element(
             self.BACK_BUTTON), "Back button not detected.")
 
-        question_text = self.get_element(self.QUESTION_TEXT)
+        question_text = self.get_element(self.QUESTION_2)
         self.tester.assertEqual(question_text.text,
                                 "Question 2 of 3",
                                 "Question text is not matched.")

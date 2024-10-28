@@ -18,7 +18,7 @@ class LoginPage(BasePage):
 
         self.LOGO = (By.CSS_SELECTOR, "aside > svg")
         self.CATCHPRASE = (By.CSS_SELECTOR, "aside > p")
-        self.HEADING = (By.CLASS_NAME, "text-title")
+        self.LOGIN_HEADING = (By.CLASS_NAME, "text-title")
         self.SUB_HEADING = (By.CLASS_NAME, "text-soft")
         self.EMAIL_LABEL = (By.ID, "email-label")
         self.EMAIL_INPUT = (By.ID, "email")
@@ -107,20 +107,6 @@ class LoginPage(BasePage):
 
         self.logger.info(f"{__class__}: Checked login form error message")
 
-    def clear_input(self, input_field: WebElement):
-        """
-        Clears the input field's contents
-
-        Params
-        ------
-        input_field: WebElement - the input field to clear
-        """
-        self.tester.assertEqual(input_field.tag_name, "input")
-        input_field.send_keys(Keys.CONTROL, "a")
-        input_field.send_keys(Keys.BACKSPACE)
-
-        self.logger.info(f"{__class__}: Cleared input field contents")
-
     def validate_page(self):
         self.await_page_load(f"{os.getenv('BASE_URL')}/login")
         self.tester.assertEqual(self.browser.title, "Login - Risevest")
@@ -132,7 +118,7 @@ class LoginPage(BasePage):
         self.tester.assertEqual(
             aside_text.text, "Dollar investments that help you grow", "Catchphrase is not matched.")
 
-        heading = self.get_element(self.HEADING)
+        heading = self.get_element(self.LOGIN_HEADING)
         self.tester.assertEqual(heading.text, "Welcome back",
                                 "Page heading is not matched.")
 

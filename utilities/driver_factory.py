@@ -35,7 +35,34 @@ class DriverFactory():
             DriverTypes.EDGE: Edge,
         }[browser_type](options=proxy_options)
 
-    def __set_proxy_options(self, browser_type: DriverTypes) -> ArgOptions:
+    @classmethod
+    def get_random_driver(cls) -> WebDriver:
+        """
+        Randomly select a browser type from the DriverTypes enum
+
+        Params
+        ------
+        browser_type: DriverTypes
+            An option from Chrome | Edge | Firefox
+
+        Returns
+        -------
+        WebDriver
+        """
+        from random import choice
+
+        browser_type = DriverTypes[choice(list(DriverTypes)).name]
+
+        proxy_options = cls.__set_proxy_options(browser_type)
+
+        return {
+            DriverTypes.CHROME: Chrome,
+            DriverTypes.FIREFOX: Firefox,
+            DriverTypes.EDGE: Edge,
+        }[browser_type](options=proxy_options)
+
+    @classmethod
+    def __set_proxy_options(cls, browser_type: DriverTypes) -> ArgOptions:
         """
         Fetch a random proxy and add to a browser Options object
 
@@ -49,7 +76,7 @@ class DriverFactory():
         ArgOptions
             A browser Options instance
         """
-        proxy = choice(proxy_list)
+        # proxy = choice(proxy_list)
 
         options: ArgOptions = {
             DriverTypes.CHROME: ChromeOptions,
@@ -57,5 +84,5 @@ class DriverFactory():
             DriverTypes.EDGE: EdgeOptions,
         }[browser_type]()
 
-        options.add_argument(f"--proxy-server={proxy}")
+        # options.add_argument(f"--proxy-server={proxy}")
         return options

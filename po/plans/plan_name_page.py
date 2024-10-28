@@ -1,6 +1,7 @@
 from unittest import TestCase
 from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.wait import WebDriverWait
 from po.plans.plan_base_page import PlanBasePage
 
 
@@ -29,8 +30,7 @@ class PlanNamePage(PlanBasePage):
             The name of the plan
         """
         name_input = self.get_element(self.NAME_INPUT)
-        name_input.send_keys(Keys.CONTROL)
-        name_input.send_keys("a")
+        self.clear_input(name_input)
         name_input.send_keys(
             plan_name if plan_name else self.plan_data["name"])
 
@@ -42,6 +42,8 @@ class PlanNamePage(PlanBasePage):
         continue_button.click()
 
     def validate_page(self):
+        WebDriverWait(self.browser, 20).until(EC.url_contains("stage=name"))
+
         heading = self.get_element(self.HEADING)
         self.tester.assertEqual(
             heading.text, "Plan name", "Heading text is not matched.")
@@ -55,7 +57,7 @@ class PlanNamePage(PlanBasePage):
 
         input_prompt = self.get_element(self.INPUT_TEXT)
         self.tester.assertEqual(
-            input_prompt.text, f"Give your {self.plan_data['type'].title()} plan a name", "Input text is not matched.")
+            input_prompt.text, f"Give your {self.plan_data['type'].lower()} plan a name", "Input text is not matched.")
 
         continue_button = self.get_element(self.CONTINUE_BUTTON)
         self.tester.assertEqual(

@@ -1,3 +1,4 @@
+import time
 from dotenv import load_dotenv
 import os
 import unittest
@@ -30,8 +31,7 @@ class TestPlans(unittest.TestCase):
         # Load environment variables for the test runner
         load_dotenv()
         cls.base_url = os.getenv("BASE_URL")
-        cls.browser = DriverFactory.get_driver(
-            browser_type=DriverTypes.EDGE)
+        cls.browser = DriverFactory.get_random_driver()
 
         cls.username = os.getenv("ACCOUNT_USERNAME")
         cls.password = os.getenv("ACCOUNT_PASSWORD")
@@ -39,7 +39,7 @@ class TestPlans(unittest.TestCase):
         cls.logger = LogHandler.create_logger()
         BasePage.set_logger(cls.logger)
 
-        cls.logger.info("Initialized Web Browser")
+        cls.logger.info(f"{__class__}: Initialized Web Browser")
 
     def setUp(self):
         self.browser.get(self.base_url)
@@ -93,26 +93,27 @@ class TestPlans(unittest.TestCase):
 
                 name_page = PlanNamePage(self.browser, self, business_plan)
                 name_page.validate_page()
-                name_page.fill_plan_name()
+                name_page.fill_plan_name(business_plan["name"])
                 name_page.click_continue()
 
-                # currency_page = PlanCurrencyPage(self.browser, self)
-                # currency_page.validate_page()
-                # currency_page.choose_naira()
+                currency_page = PlanCurrencyPage(self.browser, self)
+                currency_page.validate_page()
+                currency_page.choose_naira()
 
-                # amount_page = PlanTargetAmountPage(
-                #     self.browser, self, business_plan)
-                # amount_page.validate_page()
-                # amount_page.fill_target_amount(business_plan["amount"])
-                # amount_page.check_currency_conversion(
-                #     business_plan["investment_amount"])
-                # amount_page.click_continue()
+                amount_page = PlanTargetAmountPage(
+                    self.browser, self, business_plan)
+                amount_page.validate_page()
+                amount_page.fill_target_amount(business_plan["amount"])
+                amount_page.check_currency_conversion(
+                    round(business_plan["investment_amount"], 2)
+                )
+                amount_page.click_continue()
 
-                # date_page = PlanTargetDatePage(
-                #     self.browser, self, business_plan)
-                # date_page.validate_page()
-                # date_page.fill_target_date(business_plan["maturity_date"])
-                # date_page.click_continue()
+                date_page = PlanTargetDatePage(
+                    self.browser, self, business_plan)
+                date_page.validate_page()
+                date_page.fill_target_date(business_plan["maturity_date"])
+                date_page.click_continue()
 
                 # review_page = PlanReviewPage(self.browser, self, business_plan)
                 # review_page.validate_page()
@@ -126,6 +127,7 @@ class TestPlans(unittest.TestCase):
                 # success_page = PlanSuccessPage(self.browser, self)
                 # success_page.validate_page()
                 # success_page.click_view_plan_button()
+                time.sleep(4)
 
 
 if __name__ == "__main__":

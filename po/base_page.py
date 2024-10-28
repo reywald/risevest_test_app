@@ -1,8 +1,10 @@
 from abc import ABC, abstractmethod
+from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.remote.webdriver import WebDriver
-from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import TimeoutException, NoSuchElementException
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.common.exceptions import TimeoutException
 from unittest import TestCase
 
 
@@ -30,6 +32,18 @@ class BasePage(ABC):
             toe.msg = f"Not in the right url: {expected_url}"
             self.logger.error(toe)
             raise toe
+
+    def clear_input(self, input_field: WebElement):
+        """
+        Clears the input field's contents
+
+        Params
+        ------
+        input_field: WebElement - the input field to clear
+        """
+        self.tester.assertEqual(input_field.tag_name, "input")
+        input_field.send_keys(Keys.CONTROL, "a")
+        input_field.send_keys(Keys.BACKSPACE)
 
     def get_element(self, web_locator: tuple):
         """

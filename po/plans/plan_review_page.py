@@ -1,6 +1,7 @@
 from unittest import TestCase
 from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.wait import WebDriverWait
 from po.plans.plan_base_page import PlanBasePage
 
 
@@ -121,6 +122,8 @@ class PlanReviewPage(PlanBasePage):
         continue_button.click()
 
     def validate_page(self):
+        WebDriverWait(self.browser, 20).until(EC.url_contains("stage=review"))
+
         heading = self.get_element(self.HEADING)
         self.tester.assertEqual(
             heading.text, "Review", "Heading text is not matched.")
